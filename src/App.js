@@ -5,7 +5,7 @@ import './App.css';
 
 import Main from "./components/MainComponent";
 
-import Menu from './components/MenuComponent';
+
 class App extends Component {
   
   render() {
