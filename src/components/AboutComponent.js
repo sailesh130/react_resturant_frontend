@@ -1,15 +1,18 @@
 import React from 'react';
 import { Breadcrumb, BreadcrumbItem, Card, CardBody, CardHeader, Media } from 'reactstrap';
 import { Link } from 'react-router-dom';
-
+import { baseUrl } from '../shared/baseUrl';
+import { Loading } from './LoadingComponent';
+import { Fade, Stagger } from 'react-animation-components';
 
 function RenderLeader({leader}){
-
-    return(
+    
+        return(
+            <Fade in>
             <div key={leader.id} className="col-12 mt-5">
                 <Media tag="li">
                   <Media left middle>
-                      <Media object src={leader.image} alt={leader.name} />
+                      <Media object src={baseUrl + leader.image} alt={leader.name} />
                   </Media>
                   <Media body className="ml-5">
                     <Media heading>{leader.name}</Media>
@@ -17,17 +20,38 @@ function RenderLeader({leader}){
                     <p>{leader.description}</p>
                   </Media>
                 </Media>
-              </div>
+            </div>
+            </Fade>
         );
+
+    
 }
 
 function About(props) {
-
-    const leaders = props.leaders.map((leader) => {
-        return (
-            <RenderLeader leader={leader} />
+   
+    const leaders =function(){
+        if (props.leadersLoading ) {
+        return(
+                <Loading />
         );
-    });
+    }
+    else if (props.leaderErrMess) {
+        return(
+                <h4>{props.leaderErrMess}</h4>
+        );
+    }
+    else{
+           return(
+           <Stagger in>
+                {props.leaders.map((leader) => {
+                    return (
+                        <RenderLeader leader={leader} />)
+            })}
+            </Stagger> );
+
+        }
+        
+    } 
 
     return(
         <div className="container">
@@ -85,7 +109,7 @@ function About(props) {
                 </div>
                 <div className="col-12">
                     <Media list>
-                        {leaders}
+                        {leaders()}
                     </Media>
                 </div>
             </div>
